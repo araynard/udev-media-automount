@@ -1,0 +1,4 @@
+# -*- sh -*-
+
+# Options to use for auto-mounting devices detected with an btrfs filesystem
+AUTOMOUNT_OPTS=compress
