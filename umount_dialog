@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+# Dialog to choose what to unmount
+
+HEIGHT=15
+WIDTH=40
+CHOICE_HEIGHT=4
+BACKTITLE="Umount menu"
+TITLE="Unmount mass-storage devices"
+CHECKLIST="Select mounting points"
+
+if [[ $EUID != 0 ]]; then
+        dialog --msgbox "Please run it as root" $HEIGHT $WIDTH
+        exit 1
+fi
+
+
+DIRS="$(awk '$2 ~ /^\/media\// {print $2, 0}' /etc/mtab)"
+
+CHOICE=$(dialog --clear --no-items \
+                --backtitle "$BACKTITLE" \
+                --title "$TITLE" \
+                --ok-label "Unmount" \
+                --checklist "$CHECKLIST" $HEIGHT $WIDTH $CHOICE_HEIGHT \
+                ${DIRS[@]} \
+                2>&1 >/dev/tty)
+
+clear
+echo "$CHOICE"
+
+if umount ${CHOICE[@]}; then
+	rmdir ${CHOICE[@]}
+	dialog --msgbox "You can now safely remove $CHOICE" $HEIGHT $WIDTH
+else
+	dialog --msgbox "Some apps are using $CHOICE" $HEIGHT $WIDTH
+fi

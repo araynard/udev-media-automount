@@ -32,6 +32,7 @@ sudo cp media-automount.rules /etc/udev/rules.d/11-media-automount.rules
 sudo cp media-automount@.service /etc/systemd/system/
 sudo cp media-automount /usr/bin/
 sudo cp umount_dmenu /usr/bin/
+sudo cp umount_dialog /usr/bin/
 ```
 
 - Finally, reload udev rules:
